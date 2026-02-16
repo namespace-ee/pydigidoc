@@ -9,7 +9,7 @@ description = "Python bindings for libdigidocpp - create, validate and handle di
 readme = "README.md"
 license = "LGPL-2.1-or-later"
 license-files = ["LICENSE"]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 authors = [
     { name = "Lenno Nagel", email = "lenno@namespace.ee" }
 ]
@@ -21,7 +21,6 @@ classifiers = [
     "Operating System :: POSIX :: Linux",
     "Operating System :: Microsoft :: Windows",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
