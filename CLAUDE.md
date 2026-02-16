@@ -10,6 +10,21 @@ Python bindings for [libdigidocpp](https://github.com/open-eid/libdigidocpp) via
 - `src/pydigidoc/__init__.py` — re-exports SWIG symbols, wraps `initialize()` to use bundled schema files
 - Schema files are bundled in the wheel under `pydigidoc/schema/`
 
+## Key decisions
+
+- **Static linking** (`BUILD_SHARED_LIBS=OFF`) — self-contained wheels, LGPL-2.1 compliance via RELINKING.md + sdist source
+- **`ANDROID=TRUE` hack** in CMake — skips upstream `install(EXPORT)` which fails with static builds
+- **Symlinks** (`etc/`, `cmake/`) created at configure time — upstream uses `CMAKE_SOURCE_DIR` which points to our root, not the submodule
+- **SWIG `%rename` before `%include`** — order matters, upstream `.i` declares `%module(directors="1") digidoc`
+- **`MACOSX_DEPLOYMENT_TARGET=15.0`** — required by Homebrew OpenSSL 3
+
+## Test
+
+```bash
+uv sync --dev
+uv run pytest tests/ -v
+```
+
 ## Build
 
 ```bash
@@ -19,21 +34,9 @@ uv build --wheel
 
 Uses scikit-build-core as the build backend bridging CMake. Requires C++23, SWIG 4.0+, CMake 3.20+.
 
-## Test
+## Git
 
-```bash
-uv venv && uv pip install dist/*.whl pytest
-uv run --no-project pytest tests/ -v
-```
-
-## Key decisions
-
-- **Static linking** (`BUILD_SHARED_LIBS=OFF`) — self-contained wheels, LGPL-2.1 compliance via RELINKING.md + sdist source
-- **`ANDROID=TRUE` hack** in CMake — skips upstream `install(EXPORT)` which fails with static builds
-- **Symlinks** (`etc/`, `cmake/`) created at configure time — upstream uses `CMAKE_SOURCE_DIR` which points to our root, not the submodule
-- **SWIG `%rename` before `%include`** — order matters, upstream `.i` declares `%module(directors="1") digidoc`
-- **`MACOSX_DEPLOYMENT_TARGET=15.0`** — required by Homebrew OpenSSL 3
-- Python 3.10–3.14, no 3.9 (EOL + segfaults on macOS ARM64)
+Never use `git -C <path>` — always run git commands from the working directory.
 
 ## CI
 
