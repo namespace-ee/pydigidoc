@@ -55,16 +55,6 @@ endif()
 # builds due to $<TARGET_PDB_FILE:...> on targets that are static or don't exist.
 # We define our own install rules below.
 set(CMAKE_SKIP_INSTALL_RULES ON)
-# Suppress all upstream install() rules. They fail on Windows with static builds
-# due to $<TARGET_PDB_FILE:...> on targets that are static or don't exist, and
-# install(EXPORT) fails because private deps aren't in the export set.
-# We override install() as a no-op, then restore it after add_subdirectory.
-set(_pydigidoc_SKIP_INSTALL TRUE)
-macro(install)
-    if(NOT _pydigidoc_SKIP_INSTALL)
-        _install(${ARGV})
-    endif()
-endmacro()
 add_subdirectory(libdigidocpp EXCLUDE_FROM_ALL)
 set(CMAKE_SKIP_INSTALL_RULES OFF)
 
