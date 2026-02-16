@@ -27,6 +27,7 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
     "Programming Language :: C++",
+    "License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)",
     "Topic :: Security :: Cryptography",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
@@ -36,9 +37,7 @@ test = ["pytest>=7.0"]
 
 [project.urls]
 Homepage = "https://github.com/namespace-ee/pydigidoc"
-Documentation = "https://github.com/namespace-ee/pydigidoc"
 Repository = "https://github.com/namespace-ee/pydigidoc"
-Changelog = "https://github.com/namespace-ee/pydigidoc/blob/main/CHANGELOG.md"
 Issues = "https://github.com/namespace-ee/pydigidoc/issues"
 
 [tool.scikit-build]
