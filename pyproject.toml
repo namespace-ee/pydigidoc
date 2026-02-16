@@ -1,0 +1,49 @@
+[build-system]
+requires = ["scikit-build-core>=0.10", "swig>=4.0"]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "pydigidoc"
+version = "0.0.1"
+description = "Python bindings for libdigidocpp - create, validate and handle digitally signed documents"
+readme = "README.md"
+license = "LGPL-2.1-or-later"
+license-files = ["LICENSE"]
+requires-python = ">=3.9"
+authors = [
+    { name = "Madis Väin", email = "madisvain@gmail.com" }
+]
+keywords = ["digidoc", "digital-signature", "xades", "asice", "bdoc", "estonia", "id-card", "libdigidocpp"]
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "Intended Audience :: Developers",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: C++",
+    "Topic :: Security :: Cryptography",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7.0"]
+
+[project.urls]
+Homepage = "https://github.com/namespace-ee/pydigidoc"
+Documentation = "https://github.com/namespace-ee/pydigidoc"
+Repository = "https://github.com/namespace-ee/pydigidoc"
+Changelog = "https://github.com/namespace-ee/pydigidoc/blob/main/CHANGELOG.md"
+Issues = "https://github.com/namespace-ee/pydigidoc/issues"
+
+[tool.scikit-build]
+cmake.build-type = "Release"
+wheel.install-dir = "pydigidoc"
+wheel.packages = []
+build-dir = "build/{wheel_tag}"
