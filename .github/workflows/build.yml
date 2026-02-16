@@ -47,11 +47,11 @@ jobs:
   build_wheels:
     name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
-    if: github.event_name == 'release' && github.event.action == 'published'
+    if: github.event_name == 'release' && github.event.action == 'published' || github.event_name == 'pull_request'
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest]  # macOS and Windows disabled pending investigation
+        os: [ubuntu-latest, macos-15]  # Windows disabled pending investigation
 
     steps:
       - uses: actions/checkout@v6
