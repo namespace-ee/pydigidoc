@@ -7,13 +7,19 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 # Upstream uses CMAKE_SOURCE_DIR for paths to etc/ and cmake/modules/.
 # When included via add_subdirectory(), CMAKE_SOURCE_DIR is our root,
-# not the submodule root. Create symlinks so those references resolve.
+# not the submodule root. Create symlinks (or copies on Windows) so
+# those references resolve.
 foreach(_DIR etc cmake)
     if(NOT EXISTS ${CMAKE_SOURCE_DIR}/${_DIR})
-        file(CREATE_LINK
-            libdigidocpp/${_DIR}
-            ${CMAKE_SOURCE_DIR}/${_DIR}
-            SYMBOLIC)
+        if(WIN32)
+            file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/libdigidocpp/${_DIR}
+                DESTINATION ${CMAKE_SOURCE_DIR})
+        else()
+            file(CREATE_LINK
+                libdigidocpp/${_DIR}
+                ${CMAKE_SOURCE_DIR}/${_DIR}
+                SYMBOLIC)
+        endif()
     endif()
 endforeach()
 
