@@ -26,14 +26,17 @@ test-env/
 .DS_Store
 Thumbs.db
 
-# Upstream library (clone separately with: git clone https://github.com/open-eid/libcdoc.git)
-libcdoc/
+# CMake-generated symlinks (point to libdigidocpp/ submodule dirs)
+/etc
+/cmake
 
 # Claude Code
 .claude/
 
 # Test artifacts
 *.cdoc
+*.asice
+*.bdoc
 
 # Lock files (library - not committed)
 uv.lock

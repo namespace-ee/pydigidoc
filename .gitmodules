@@ -1,0 +1,3 @@
+[submodule "libdigidocpp"]
+	path = libdigidocpp
+	url = https://github.com/open-eid/libdigidocpp.git

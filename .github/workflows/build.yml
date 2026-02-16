@@ -1,0 +1,174 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build and test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libssl-dev libxml2-dev zlib1g-dev libxmlsec1-dev
+
+      - name: Build wheel
+        run: uv build --wheel
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wheel
+          path: dist/*.whl
+
+      - name: Test
+        run: |
+          uv venv
+          uv pip install dist/*.whl pytest
+          uv run --no-project pytest tests/ -v
+
+  build_wheels:
+    name: Build wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    if: github.event_name == 'release' && github.event.action == 'published'
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Install dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: brew install openssl@3 libxml2 xmlsec1 cmake swig
+
+      - name: Install dependencies (Windows)
+        if: runner.os == 'Windows'
+        run: vcpkg install openssl:x64-windows zlib:x64-windows libxml2:x64-windows xmlsec:x64-windows
+
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.22.0
+        env:
+          CIBW_BUILD_FRONTEND: "build[uv]"
+          CIBW_BUILD: "cp39-* cp310-* cp311-* cp312-* cp313-*"
+          CIBW_SKIP: "*-win32 *-manylinux_i686 *-musllinux_*"
+
+          # Linux: manylinux_2_28 with GCC 13 for C++23
+          CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
+          CIBW_MANYLINUX_AARCH64_IMAGE: manylinux_2_28
+          CIBW_BEFORE_ALL_LINUX: >
+            dnf install -y gcc-toolset-13 perl-IPC-Cmd libxml2-devel zlib-devel &&
+            curl -L https://www.openssl.org/source/openssl-3.0.13.tar.gz | tar xz &&
+            cd openssl-3.0.13 &&
+            source /opt/rh/gcc-toolset-13/enable &&
+            ./config --prefix=/usr/local/openssl3 --openssldir=/usr/local/openssl3 &&
+            make -j$(nproc) &&
+            make install_sw install_ssldirs &&
+            cd /tmp &&
+            curl -L https://github.com/lsh123/xmlsec/releases/download/1.3.7/xmlsec1-1.3.7.tar.gz | tar xz &&
+            cd xmlsec1-1.3.7 &&
+            ./configure --prefix=/usr/local --with-openssl=/usr/local/openssl3 --without-gnutls --without-gcrypt --without-nss &&
+            make -j$(nproc) &&
+            make install
+          CIBW_ENVIRONMENT_LINUX: >
+            OPENSSL_ROOT_DIR=/usr/local/openssl3
+            PKG_CONFIG_PATH=/usr/local/openssl3/lib64/pkgconfig:/usr/local/lib/pkgconfig
+            CC=/opt/rh/gcc-toolset-13/root/usr/bin/gcc
+            CXX=/opt/rh/gcc-toolset-13/root/usr/bin/g++
+            PATH=/opt/rh/gcc-toolset-13/root/usr/bin:$PATH
+            LD_LIBRARY_PATH=/usr/local/openssl3/lib64:/usr/local/openssl3/lib:/usr/local/lib:/opt/rh/gcc-toolset-13/root/usr/lib64:$LD_LIBRARY_PATH
+          CIBW_BEFORE_BUILD_LINUX: uv pip install --system cmake swig
+
+          # macOS
+          CIBW_ENVIRONMENT_MACOS: >
+            OPENSSL_ROOT_DIR=/opt/homebrew/opt/openssl@3
+            CMAKE_PREFIX_PATH=/opt/homebrew
+            MACOSX_DEPLOYMENT_TARGET=15.0
+
+          # Windows
+          CIBW_BEFORE_BUILD_WINDOWS: uv pip install --system cmake swig delvewheel
+          CIBW_ENVIRONMENT_WINDOWS: >
+            CMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake
+
+          # Wheel repair
+          CIBW_REPAIR_WHEEL_COMMAND_LINUX: auditwheel repair -w {dest_dir} {wheel}
+          CIBW_REPAIR_WHEEL_COMMAND_MACOS: delocate-wheel -w {dest_dir} {wheel}
+          CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: delvewheel repair --add-path C:/vcpkg/installed/x64-windows/bin -w {dest_dir} {wheel}
+
+          # Test
+          CIBW_TEST_REQUIRES: pytest
+          CIBW_TEST_COMMAND: pytest {project}/tests -v
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wheels-${{ matrix.os }}
+          path: ./wheelhouse/*.whl
+
+  build_sdist:
+    name: Build source distribution
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release' && github.event.action == 'published'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Build sdist
+        run: uv build --sdist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sdist
+          path: dist/*.tar.gz
+
+  publish:
+    name: Publish to PyPI
+    needs: [build_wheels, build_sdist]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release' && github.event.action == 'published'
+    environment:
+      name: pypi
+      url: https://pypi.org/p/pydigidoc
+    permissions:
+      id-token: write
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: wheels-*
+          path: dist
+          merge-multiple: true
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: sdist
+          path: dist
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
