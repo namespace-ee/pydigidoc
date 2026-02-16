@@ -35,6 +35,13 @@ set(FRAMEWORK OFF CACHE BOOL "" FORCE)
 # and digidocpp_priv aren't in the export set. We don't need the export config.
 set(ANDROID TRUE)
 
+# On Windows, upstream unconditionally references $<TARGET_PDB_FILE:digidoc-tool>
+# even when BUILD_TOOLS=OFF. Create a dummy target so the generator expression resolves.
+if(WIN32 AND NOT TARGET digidoc-tool)
+    file(WRITE ${CMAKE_BINARY_DIR}/_dummy.c "int main(void){return 0;}")
+    add_executable(digidoc-tool EXCLUDE_FROM_ALL ${CMAKE_BINARY_DIR}/_dummy.c)
+endif()
+
 add_subdirectory(libdigidocpp EXCLUDE_FROM_ALL)
 
 unset(ANDROID)
