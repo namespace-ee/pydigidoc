@@ -4,7 +4,7 @@ build-backend = "scikit_build_core.build"
 
 [project]
 name = "pydigidoc"
-version = "0.0.2"
+version = "0.0.3"
 description = "Python bindings for libdigidocpp - create, validate and handle digitally signed documents"
 readme = "README.md"
 license = "LGPL-2.1-or-later"
@@ -49,7 +49,7 @@ build-dir = "build/{wheel_tag}"
 sdist.include = ["libdigidocpp/**"]
 
 [tool.bumpversion]
-current_version = "0.0.2"
+current_version = "0.0.3"
 commit = true
 tag = true
 tag_name = "v{new_version}"
