@@ -31,8 +31,8 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 
-[project.optional-dependencies]
-test = ["pytest>=7.0"]
+[dependency-groups]
+dev = ["pytest>=7.0", "bump-my-version>=0.31"]
 
 [project.urls]
 Homepage = "https://github.com/namespace-ee/pydigidoc"
