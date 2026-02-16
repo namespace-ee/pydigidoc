@@ -51,7 +51,7 @@ from pydigidoc.digidoc import (
     TSAInfo,
 )
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
 # Path to bundled schema/config files
 _SCHEMA_DIR = _os.path.join(_os.path.dirname(__file__), "schema")
