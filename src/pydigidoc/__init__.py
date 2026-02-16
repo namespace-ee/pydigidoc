@@ -10,27 +10,22 @@ import os as _os
 
 from pydigidoc.digidoc import (
     # Module-level functions (already snake_case or lowercase)
-    initialize as _initialize_raw,
     terminate,
     version,
     app_info,
     user_agent,
     initialize_lib as _initialize_lib_raw,
-
     # Container
     Container,
     ContainerOpenCB,
-
     # Data types
     DataFile,
     Signature,
-
     # Signers
     Signer,
     PKCS11Signer,
     PKCS12Signer,
     ExternalSigner,
-
     # Configuration
     Conf,
     ConfV2,
@@ -39,14 +34,12 @@ from pydigidoc.digidoc import (
     ConfV5,
     XmlConf,
     DigiDocConf,
-
     # Container types (template instantiations)
     StringVector,
     StringMap,
     DataFiles,
     Signatures,
     TSAInfos,
-
     # Structs
     TSAInfo,
 )
@@ -76,9 +69,9 @@ def initialize_lib(app_name: str, path: str, user_agent: str = "") -> None:
     else:
         _initialize_lib_raw(app_name, path)
 
+
 __all__ = [
     "__version__",
-
     # Functions
     "initialize",
     "terminate",
@@ -86,21 +79,17 @@ __all__ = [
     "app_info",
     "user_agent",
     "initialize_lib",
-
     # Container
     "Container",
     "ContainerOpenCB",
-
     # Data types
     "DataFile",
     "Signature",
-
     # Signers
     "Signer",
     "PKCS11Signer",
     "PKCS12Signer",
     "ExternalSigner",
-
     # Configuration
     "Conf",
     "ConfV2",
@@ -109,14 +98,12 @@ __all__ = [
     "ConfV5",
     "XmlConf",
     "DigiDocConf",
-
     # Container types
     "StringVector",
     "StringMap",
     "DataFiles",
     "Signatures",
     "TSAInfos",
-
     # Structs
     "TSAInfo",
 ]
