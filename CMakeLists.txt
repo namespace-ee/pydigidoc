@@ -35,6 +35,22 @@ set(FRAMEWORK OFF CACHE BOOL "" FORCE)
 # and digidocpp_priv aren't in the export set. We don't need the export config.
 set(ANDROID TRUE)
 
+# On macOS, prefer Homebrew's libxml2 over Xcode SDK to avoid ABI mismatches.
+# Homebrew xmlsec1 links Homebrew libxml2 2.15+, but CMake finds SDK libxml2 2.9;
+# the ABI difference causes segfaults at runtime. Homebrew libxml2 is keg-only,
+# so we must point CMake to its specific prefix.
+if(APPLE AND NOT DEFINED LibXml2_ROOT)
+    execute_process(
+        COMMAND brew --prefix libxml2
+        OUTPUT_VARIABLE _HOMEBREW_LIBXML2
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+        ERROR_QUIET
+        RESULT_VARIABLE _BREW_RESULT)
+    if(_BREW_RESULT EQUAL 0 AND _HOMEBREW_LIBXML2)
+        set(LibXml2_ROOT ${_HOMEBREW_LIBXML2})
+    endif()
+endif()
+
 # Disable upstream install() rules entirely — they fail on Windows with static
 # builds due to $<TARGET_PDB_FILE:...> on targets that are static or don't exist.
 # We define our own install rules below.
