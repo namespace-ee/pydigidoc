@@ -51,12 +51,26 @@ if(APPLE AND NOT DEFINED LibXml2_ROOT)
     endif()
 endif()
 
-# Disable upstream install() rules entirely — they fail on Windows with static
-# builds due to $<TARGET_PDB_FILE:...> on targets that are static or don't exist.
-# We define our own install rules below.
-set(CMAKE_SKIP_INSTALL_RULES ON)
+# Suppress all upstream install() rules — they fail on Windows with static builds
+# due to $<TARGET_PDB_FILE:...> on targets that are static or don't exist.
+# Override install() as a no-op during add_subdirectory, then restore it.
+set(_pydigidoc_SKIP_INSTALL TRUE)
+macro(install)
+    if(NOT _pydigidoc_SKIP_INSTALL)
+        _install(${ARGV})
+    endif()
+endmacro()
 add_subdirectory(libdigidocpp EXCLUDE_FROM_ALL)
-set(CMAKE_SKIP_INSTALL_RULES OFF)
+set(_pydigidoc_SKIP_INSTALL FALSE)
+
+# On Windows with static builds, upstream Exports.h defaults to __declspec(dllimport)
+# because digidocpp_EXPORTS is only defined for shared library builds. Fix by defining
+# it on the static library target so DIGIDOCPP_EXPORT becomes __declspec(dllexport),
+# which is correct for compiling (not importing) the library.
+if(WIN32 AND NOT BUILD_SHARED_LIBS)
+    target_compile_definitions(digidocpp PUBLIC digidocpp_EXPORTS)
+    target_compile_definitions(digidocpp_util PUBLIC digidocpp_EXPORTS)
+endif()
 
 unset(ANDROID)
 set(CMAKE_DISABLE_FIND_PACKAGE_SWIG FALSE)
