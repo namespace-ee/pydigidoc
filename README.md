@@ -5,7 +5,7 @@ Python bindings for [libdigidocpp](https://github.com/open-eid/libdigidocpp) —
 ## Installation
 
 ```bash
-uv add pydigidoc
+pip install pydigidoc
 ```
 
 ## Usage

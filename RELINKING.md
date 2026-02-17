@@ -22,8 +22,9 @@ cd pydigidoc-*
 # e.g., edit libdigidocpp/src/Container.cpp
 
 # Rebuild
-uv build --wheel
-uv add dist/*.whl
+pip install build
+python -m build --wheel
+pip install dist/*.whl
 ```
 
 ## Rebuilding from git
@@ -35,6 +36,7 @@ cd pydigidoc
 # Make your modifications to the libdigidocpp/ submodule
 
 # Rebuild
-uv build --wheel
-uv add dist/*.whl
+pip install build
+python -m build --wheel
+pip install dist/*.whl
 ```

@@ -39,7 +39,10 @@ jobs:
           path: dist/*.whl
 
       - name: Test
-        run: uv run --no-project --with "$(ls dist/*.whl)" --with pytest pytest tests/ -v
+        run: |
+          uv venv
+          uv pip install dist/*.whl pytest
+          uv run --no-project pytest tests/ -v
 
   build_wheels:
     name: Build wheels on ${{ matrix.os }}
@@ -97,7 +100,7 @@ jobs:
             CXX=/opt/rh/gcc-toolset-13/root/usr/bin/g++
             PATH=/opt/rh/gcc-toolset-13/root/usr/bin:$PATH
             LD_LIBRARY_PATH=/usr/local/openssl3/lib64:/usr/local/openssl3/lib:/usr/local/lib:/opt/rh/gcc-toolset-13/root/usr/lib64:$LD_LIBRARY_PATH
-          CIBW_BEFORE_BUILD_LINUX: uv tool install cmake && uv tool install swig
+          CIBW_BEFORE_BUILD_LINUX: uv pip install --system cmake swig
 
           # macOS
           CIBW_ENVIRONMENT_MACOS: >
@@ -106,7 +109,7 @@ jobs:
             MACOSX_DEPLOYMENT_TARGET=15.0
 
           # Windows
-          CIBW_BEFORE_BUILD_WINDOWS: uv tool install cmake && uv tool install swig && uv tool install delvewheel
+          CIBW_BEFORE_BUILD_WINDOWS: uv pip install --system cmake swig delvewheel
           CIBW_ENVIRONMENT_WINDOWS: >
             CMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake
 
