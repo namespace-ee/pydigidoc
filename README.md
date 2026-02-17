@@ -43,7 +43,7 @@ pydigidoc.terminate()
 - CMake 3.20+
 - SWIG 4.0+
 - C++23 compiler (GCC 13+, Clang 16+, MSVC 2022+)
-- OpenSSL 3.0+, libxml2, zlib, xmlsec1
+- OpenSSL 3.5+, libxml2, zlib, xmlsec1
 
 ### Build
 
