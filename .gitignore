@@ -38,5 +38,8 @@ Thumbs.db
 *.asice
 *.bdoc
 
+# Local notes
+TODO.md
+
 # Lock files (library - not committed)
 uv.lock

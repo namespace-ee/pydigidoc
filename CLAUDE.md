@@ -1,6 +1,6 @@
 # pydigidoc
 
-Python bindings for [libdigidocpp](https://github.com/open-eid/libdigidocpp) via SWIG. Produces pip-installable wheels for creating, validating, and handling digitally signed documents (ASiC-E, BDOC, etc).
+Python bindings for [libdigidocpp](https://github.com/open-eid/libdigidocpp) via SWIG. Produces installable wheels for creating, validating, and handling digitally signed documents (ASiC-E, BDOC, etc).
 
 ## Architecture
 

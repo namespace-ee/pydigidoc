@@ -38,13 +38,13 @@ dev = ["pytest>=7.0", "bump-my-version>=0.31", "ruff>=0.9"]
 Homepage = "https://github.com/namespace-ee/pydigidoc"
 Repository = "https://github.com/namespace-ee/pydigidoc"
 Issues = "https://github.com/namespace-ee/pydigidoc/issues"
+Changelog = "https://github.com/namespace-ee/pydigidoc/releases"
 
 [tool.scikit-build]
 cmake.build-type = "Release"
 cmake.version = ">=3.20"
 wheel.install-dir = "pydigidoc"
 wheel.packages = []
-wheel.exclude = ["pydigidoc/lib/**", "pydigidoc/include/**"]
 build-dir = "build/{wheel_tag}"
 sdist.include = ["libdigidocpp/**"]
 

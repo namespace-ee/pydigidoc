@@ -10,8 +10,8 @@
 
 /* Global camelCase -> snake_case renaming for all functions and methods.
    Must appear BEFORE %include of upstream interface. */
-%rename("%(undercase)s", %$isfunction) "";
-%rename("%(undercase)s", %$ismember, %$not %$isenumitem, %$not %$isconstant, %$not %$isenum) "";
+%rename("%(undercase)s", %$isfunction, %$not %$isconstructor, %$not %$isdestructor) "";
+%rename("%(undercase)s", %$ismember, %$not %$isenumitem, %$not %$isconstant, %$not %$isconstructor, %$not %$isdestructor, %$not %$isenum) "";
 
 /* Include upstream libdigidocpp SWIG interface (already has Python typemaps,
    director support, exception handling, template instantiations, %newobject).

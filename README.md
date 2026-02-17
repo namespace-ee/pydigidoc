@@ -50,7 +50,7 @@ pydigidoc.terminate()
 ```bash
 git clone --recurse-submodules https://github.com/namespace-ee/pydigidoc.git
 cd pydigidoc
-pip install .
+uv build --wheel
 ```
 
 ## License
