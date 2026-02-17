@@ -20,8 +20,8 @@ Items identified during cross-project review (Feb 2026).
 
 ## Documentation
 
-- [x] ~~`README.md` shows `pip install .`~~ — updated to `uv build --wheel && pip install dist/*.whl`
-- [ ] `RELINKING.md` uses `pip install build` / `python -m build --wheel` — keeping pip-based instructions since relinking users may not have uv
+- [x] ~~`README.md` shows `pip install .`~~ — updated to `uv build --wheel && uv pip install dist/*.whl`
+- [x] ~~`RELINKING.md` uses `pip install build` / `python -m build --wheel`~~ — updated to `uv build --wheel`
 
 ## Tests
 
