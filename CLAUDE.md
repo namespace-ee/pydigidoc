@@ -16,7 +16,6 @@ Python bindings for [libdigidocpp](https://github.com/open-eid/libdigidocpp) via
 - **`ANDROID=TRUE` hack** in CMake — skips upstream `install(EXPORT)` which fails with static builds
 - **Symlinks** (`etc/`, `cmake/`) created at configure time — upstream uses `CMAKE_SOURCE_DIR` which points to our root, not the submodule
 - **SWIG `%rename` before `%include`** — order matters, upstream `.i` declares `%module(directors="1") digidoc`
-- **`MACOSX_DEPLOYMENT_TARGET=15.0`** — required by Homebrew OpenSSL 3
 
 ## Test
 
