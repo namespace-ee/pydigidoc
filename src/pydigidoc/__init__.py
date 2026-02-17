@@ -50,22 +50,22 @@ __version__ = "0.0.3"
 _SCHEMA_DIR = _os.path.join(_os.path.dirname(__file__), "schema")
 
 
-def initialize(app_name: str = "libdigidocpp", user_agent: str = "") -> None:
+def initialize(app_name: str = "libdigidocpp", user_agent_str: str = "") -> None:
     """Initialize the libdigidocpp library with bundled schema files.
 
     Uses the schema files bundled in the wheel so no system-wide
     installation of libdigidocpp is required.
     """
-    if user_agent:
-        _initialize_lib_raw(app_name, user_agent, _SCHEMA_DIR)
+    if user_agent_str:
+        _initialize_lib_raw(app_name, user_agent_str, _SCHEMA_DIR)
     else:
         _initialize_lib_raw(app_name, _SCHEMA_DIR)
 
 
-def initialize_lib(app_name: str, path: str, user_agent: str = "") -> None:
+def initialize_lib(app_name: str, path: str, user_agent_str: str = "") -> None:
     """Initialize with a custom schema/config directory."""
-    if user_agent:
-        _initialize_lib_raw(app_name, user_agent, path)
+    if user_agent_str:
+        _initialize_lib_raw(app_name, user_agent_str, path)
     else:
         _initialize_lib_raw(app_name, path)
 
