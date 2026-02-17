@@ -20,7 +20,7 @@ Items identified during cross-project review (Feb 2026).
 
 ## Documentation
 
-- [x] ~~`README.md` shows `pip install .`~~ — updated to `uv build --wheel && uv pip install dist/*.whl`
+- [x] ~~`README.md` shows `pip install .`~~ — updated to `uv add pydigidoc` / `uv build --wheel`
 - [x] ~~`RELINKING.md` uses `pip install build` / `python -m build --wheel`~~ — updated to `uv build --wheel`
 
 ## Tests

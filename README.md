@@ -5,7 +5,7 @@ Python bindings for [libdigidocpp](https://github.com/open-eid/libdigidocpp) —
 ## Installation
 
 ```bash
-uv pip install pydigidoc
+uv add pydigidoc
 ```
 
 ## Usage
@@ -50,7 +50,7 @@ pydigidoc.terminate()
 ```bash
 git clone --recurse-submodules https://github.com/namespace-ee/pydigidoc.git
 cd pydigidoc
-uv build --wheel && uv pip install dist/*.whl
+uv build --wheel
 ```
 
 ## License

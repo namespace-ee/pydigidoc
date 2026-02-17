@@ -23,7 +23,7 @@ cd pydigidoc-*
 
 # Rebuild
 uv build --wheel
-uv pip install dist/*.whl
+uv add dist/*.whl
 ```
 
 ## Rebuilding from git
@@ -36,5 +36,5 @@ cd pydigidoc
 
 # Rebuild
 uv build --wheel
-uv pip install dist/*.whl
+uv add dist/*.whl
 ```
