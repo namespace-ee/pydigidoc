@@ -10,8 +10,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    name: Build and test
+  test:
+    name: Test
     runs-on: ubuntu-latest
 
     steps:
@@ -33,11 +33,6 @@ jobs:
       - name: Build wheel
         run: uv build --wheel
 
-      - uses: actions/upload-artifact@v6
-        with:
-          name: wheel
-          path: dist/*.whl
-
       - name: Test
         run: |
           uv venv
@@ -46,6 +41,7 @@ jobs:
 
   build_wheels:
     name: Build wheels on ${{ matrix.os }}
+    needs: [test]
     runs-on: ${{ matrix.os }}
     if: github.event_name == 'release' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     strategy:
@@ -129,6 +125,7 @@ jobs:
 
   build_sdist:
     name: Build source distribution
+    needs: [test]
     runs-on: ubuntu-latest
     if: github.event_name == 'release' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     steps:
