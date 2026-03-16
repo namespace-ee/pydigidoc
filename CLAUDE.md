@@ -4,7 +4,7 @@ Python bindings for [libdigidocpp](https://github.com/open-eid/libdigidocpp) via
 
 ## Architecture
 
-- `libdigidocpp/` — upstream C++ library as a git submodule (pinned to v4.3.0)
+- `libdigidocpp/` — upstream C++ library as a git submodule (pinned to master)
 - `CMakeLists.txt` — builds upstream statically, then builds SWIG Python module
 - `swig/pydigidoc.i` — thin wrapper: `%rename` for snake_case + `%include "libdigidocpp.i"`
 - `src/pydigidoc/__init__.py` — re-exports SWIG symbols, wraps `initialize()` to use bundled schema files

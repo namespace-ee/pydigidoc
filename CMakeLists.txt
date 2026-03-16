@@ -5,24 +5,6 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-# Upstream uses CMAKE_SOURCE_DIR for paths to etc/ and cmake/modules/.
-# When included via add_subdirectory(), CMAKE_SOURCE_DIR is our root,
-# not the submodule root. Create symlinks (or copies on Windows) so
-# those references resolve.
-foreach(_DIR etc cmake)
-    if(NOT EXISTS ${CMAKE_SOURCE_DIR}/${_DIR})
-        if(WIN32)
-            file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/libdigidocpp/${_DIR}
-                DESTINATION ${CMAKE_SOURCE_DIR})
-        else()
-            file(CREATE_LINK
-                libdigidocpp/${_DIR}
-                ${CMAKE_SOURCE_DIR}/${_DIR}
-                SYMBOLIC)
-        endif()
-    endif()
-endforeach()
-
 # Suppress upstream's SWIG/tools/framework/docs builds
 set(CMAKE_DISABLE_FIND_PACKAGE_SWIG TRUE)
 set(CMAKE_DISABLE_FIND_PACKAGE_Doxygen TRUE)
@@ -30,10 +12,6 @@ set(CMAKE_DISABLE_FIND_PACKAGE_Boost TRUE)
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 set(BUILD_TOOLS OFF CACHE BOOL "" FORCE)
 set(FRAMEWORK OFF CACHE BOOL "" FORCE)
-
-# Skip upstream install(EXPORT) — fails with static builds because minizip
-# and digidocpp_priv aren't in the export set. We don't need the export config.
-set(ANDROID TRUE)
 
 # On macOS, prefer Homebrew's libxml2 over Xcode SDK to avoid ABI mismatches.
 # Homebrew xmlsec1 links Homebrew libxml2 2.15+, but CMake finds SDK libxml2 2.9;
@@ -72,7 +50,6 @@ if(WIN32 AND NOT BUILD_SHARED_LIBS)
     target_compile_definitions(digidocpp_util PUBLIC digidocpp_EXPORTS)
 endif()
 
-unset(ANDROID)
 set(CMAKE_DISABLE_FIND_PACKAGE_SWIG FALSE)
 
 # Verify upstream SWIG interface has the expected module declaration
