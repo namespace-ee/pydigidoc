@@ -4,7 +4,7 @@ Python bindings for [libdigidocpp](https://github.com/open-eid/libdigidocpp) via
 
 ## Architecture
 
-- `libdigidocpp/` — upstream C++ library as a git submodule (pinned to v4.3.0)
+- `libdigidocpp/` — upstream C++ library as a git submodule (pinned to master)
 - `CMakeLists.txt` — builds upstream statically, then builds SWIG Python module
 - `swig/pydigidoc.i` — thin wrapper: `%rename` for snake_case + `%include "libdigidocpp.i"`
 - `src/pydigidoc/__init__.py` — re-exports SWIG symbols, wraps `initialize()` to use bundled schema files
@@ -13,8 +13,8 @@ Python bindings for [libdigidocpp](https://github.com/open-eid/libdigidocpp) via
 ## Key decisions
 
 - **Static linking** (`BUILD_SHARED_LIBS=OFF`) — self-contained wheels, LGPL-2.1 compliance via RELINKING.md + sdist source
-- **`ANDROID=TRUE` hack** in CMake — skips upstream `install(EXPORT)` which fails with static builds
-- **Symlinks** (`etc/`, `cmake/`) created at configure time — upstream uses `CMAKE_SOURCE_DIR` which points to our root, not the submodule
+- **`install()` override hack** — suppresses upstream install rules that fail on Windows static builds due to `$<TARGET_PDB_FILE:...>` on static targets. Remove when [#722](https://github.com/open-eid/libdigidocpp/pull/722) is merged.
+- **`digidocpp_EXPORTS` hack** — defines `digidocpp_EXPORTS` on static targets so `Exports.h` doesn't default to `__declspec(dllimport)` on Windows. Remove when [#723](https://github.com/open-eid/libdigidocpp/pull/723) is merged.
 - **SWIG `%rename` before `%include`** — order matters, upstream `.i` declares `%module(directors="1") digidoc`
 
 ## Test
